@@ -1,0 +1,50 @@
+#  This is my first test bot which i designed to login into Twitter. I have used a class and imported a selenium
+#  as it is a pretty easy to use and understand. 
+
+from selenium import webdriver
+from selenium.webdriver.common import keys
+import time
+
+
+class TestBot_Wednesday:
+    def __init__(self, username, password):
+    #  Pass in your password and username here below
+        self.username = username
+        self.password = password
+        self.bot = webdriver.Firefox()
+
+    def login(self):
+        bot = self.bot
+        bot.get('http://eguru.tk.te.ua/login/index.php')
+        time.sleep(5)
+        email = bot.find_element_by_name('username')
+        password = bot.find_element_by_name('password')
+        email.clear()
+        password.clear()
+        email.send_keys(self.username)
+        password.send_keys(self.password)
+        password.send_keys(keys.Keys.RETURN)
+        time.sleep(3)
+
+    def module_one(self):
+        bot = self.bot
+        bot.get('http://eguru.tk.te.ua/mod/attendance/view.php?id=21158')
+        time.sleep(5)
+
+    def module_two(self):
+        bot = self.bot
+        bot.get('http://eguru.tk.te.ua/mod/attendance/view.php?id=40957')
+        time.sleep(5)
+
+    def module_three(self):
+        bot = self.bot
+        bot.get('http://eguru.tk.te.ua/mod/attendance/view.php?id=20955')
+        time.sleep(5)
+
+
+alex = TestBot_Wednesday('oleksandr.tsependa@gmail.com', 'Ctrannik34@')
+
+alex.login()
+alex.module_one()
+alex.module_two()
+alex.module_three()
