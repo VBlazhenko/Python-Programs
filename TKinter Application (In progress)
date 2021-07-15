@@ -1,0 +1,338 @@
+import os
+from tkinter import *
+from selenium import webdriver
+from selenium.webdriver.common import keys
+import time
+from tkcalendar import Calendar
+
+#  ============  TWITTER  ===========
+
+
+class TwitterBot:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.bot = webdriver.Firefox()
+
+    def login(self):
+        bot = self.bot
+        bot.get('https://twitter.com/login')
+        time.sleep(7)
+        email = bot.find_element_by_name('session[username_or_email]')
+        password = bot.find_element_by_name('session[password]')
+        email.clear()
+        password.clear()
+        email.send_keys(self.username)
+        password.send_keys(self.password)
+        password.send_keys(keys.Keys.RETURN)
+        time.sleep(3)
+
+    def logout(self):
+        bot = self.bot
+        time.sleep(3)
+        bot.get('https://twitter.com/logout')
+
+
+def call():
+    twitter = TwitterBot(us_verify.get(), ps_verify.get())
+    twitter.login()
+
+
+def twitter_details():
+    global us_verify, ps_verify
+    global twitter_window
+
+    twitter_window = Tk()
+    twitter_window.geometry('450x200')
+    twitter_window.title("Twitter Login")
+
+    us_verify = StringVar()
+    ps_verify = StringVar()
+
+    Label(twitter_window, text="Username").pack()
+    Entry(twitter_window, textvariable=us_verify).pack()
+
+    Label(twitter_window, text="Password").pack()
+    Entry(twitter_window, textvariable=ps_verify, show='*').pack()
+
+    Button(twitter_window, text="Login", command=call).pack()
+
+    twitter_window.mainloop()
+
+
+#  ============  TWITTER  ===========
+
+#  ============  YOUTUBE  ===========
+
+class YouTube:
+    def __init__(self):
+        self.bot = webdriver.Firefox()
+
+    def click_me(self):
+        bot = self.bot
+        bot.get('https://www.youtube.com/')
+        time.sleep(3)
+
+
+def call_youtube():
+    click = YouTube()
+    click.click_me()
+
+
+#  ============  YOUTUBE  ===========
+
+
+#  Creating a register window
+def register():
+    #  Globalising the function/ window
+    global register_screen
+    #  Defining the window
+    register_screen = Toplevel(main_screen)
+    register_screen.title("Registration Window")
+    register_screen.geometry("500x250")
+
+    #  Globalising the following
+    global username
+    global password
+    global username_entry
+    global password_entry
+    #  Creating a StringVar
+    username = StringVar()
+    password = StringVar()
+    email = StringVar()
+
+    #  Creating labels and packing the
+    Label(register_screen, text="Please enter details below", bg="lightyellow").pack()
+    Label(register_screen, text="").pack()
+    username_label = Label(register_screen, text="Username:")
+    username_label.pack()
+    username_label.place(x=120, y=40)
+    email_label = Label(register_screen, text="Email:")
+    email_label.pack()
+    email_label.place(x=120, y=95)
+
+    #  Creating Entry boxes
+    username_entry = Entry(register_screen, textvariable=username)
+    username_entry.pack(pady=5)
+
+    #  Creating labels and packing them
+    password_label = Label(register_screen, text="Password:")
+    password_label.pack()
+    password_label.place(x=120, y=70)
+
+    #  Creating Entry box
+    password_entry = Entry(register_screen, textvariable=password, show='*')
+    password_entry.pack()
+
+    #  Creating Entry box
+    email_entry = Entry(register_screen, textvariable=email)
+    email_entry.pack(pady=5)
+
+    #  Creating labels and packing them
+    Label(register_screen, text="").pack()
+    Button(register_screen, text="Register", width=10, height=1, bg="lightgreen", command=register_user).pack()
+
+
+#  Creating a login window
+def login():
+    #  Globalising it
+    global login_screen
+
+    #  Defining the window
+    login_screen = Toplevel(main_screen)
+    login_screen.title("Login Window")
+    login_screen.geometry("500x250")
+    #  Creating a main label
+    Label(login_screen, text="Please enter details below to continue").pack()
+    Label(login_screen, text="").pack()
+
+    #  Globalising the following
+    global username_verify
+    global password_verify
+
+    #  Creating StringVar for the following
+    username_verify = StringVar()
+    password_verify = StringVar()
+
+    #  Globalising the following
+    global username_login_entry
+    global password_login_entry
+
+    #  Creating a label and packing it
+    login_username = Label(login_screen, text="Username: ")
+    login_username.pack()
+    login_username.place(x=120, y=40)
+
+    #  Creating an Entry box for the following
+    username_login_entry = Entry(login_screen, textvariable=username_verify)
+    username_login_entry.pack()
+
+    #  Creating a label and packing it
+    Label(login_screen, text="").pack()
+    login_password = Label(login_screen, text="Password: ")
+    login_password.pack()
+    login_password.place(x=120, y=80)
+
+    #  Creating an Entry box for the following
+    password_login_entry = Entry(login_screen, textvariable=password_verify, show='*')
+    password_login_entry.pack()
+
+    #  Creating a label and packing it
+    Label(login_screen, text="").pack()
+    Button(login_screen, text="Login", bg="lightgreen", width=10, height=1, command=login_verify).pack()
+
+
+#  Creating a register user function
+def register_user():
+    #  Specifying what data to get and store in the following
+    username_info = username.get()
+    password_info = password.get()
+
+    #  Specifying what we are doing with the file and what mode
+    file = open(username_info, "w")
+    file.write(username_info + "\n")
+    file.write(password_info)
+
+    #  Closing the file
+    file.close()
+
+    #  Cleaning fields
+    username_entry.delete(0, END)
+    password_entry.delete(0, END)
+
+    #  Showing a success registration message
+    Label(register_screen, text="Registration Completed", fg="green", font=("calibri", 10)).pack()
+
+
+#  Creating a login verify function
+def login_verify():
+    #  Specifying what data to get and store in the following
+    username1 = username_verify.get()
+    password1 = password_verify.get()
+
+    #  Cleaning fields
+    username_login_entry.delete(0, END)
+    password_login_entry.delete(0, END)
+
+    #  Working with os module
+    list_of_files = os.listdir()
+    #  Calling a login_success function if username in list_of_files otherwise password not recognised
+    #  and calling user not found function
+    if username1 in list_of_files:
+        file1 = open(username1, "r")
+        verify = file1.read().splitlines()
+        if password1 in verify:
+            login_sucess()
+        else:
+            password_not_recognised()
+    else:
+        user_not_found()
+
+
+#  Creating a login success window
+def login_sucess():
+    #  Globalising it
+    global login_success_screen
+
+    #  Defining the following
+    login_success_screen = Toplevel(login_screen)
+    login_success_screen.title("New Page")
+    login_success_screen.geometry("550x250")
+    login_success_screen.configure(bg="lightblue")
+
+    #  Creating a label
+    menu_button = Label(login_success_screen, text="Menu: ")
+    menu_button.pack()
+    menu_button.place(x=55, y=5)
+
+    weather_button = Button(login_success_screen, text="Twitter Login", command=twitter_details, height="1", width="15")
+    weather_button.pack()
+    weather_button.place(x=20, y=25)
+
+    calendar_button = Button(login_success_screen, text="Calendar", command=calendar_window, height="1", width="15")
+    calendar_button.pack()
+    calendar_button.place(x=20, y=53)
+
+
+def calendar_window():
+    calendar_label = Label(login_success_screen, text="Calendar")
+    calendar_label.pack()
+    calendar_label.place(x=340, y=1)
+    cal = Calendar(login_success_screen, selectmode='day', year=2021, month=6, day=11)
+    cal.pack(pady=20)
+    cal.place(x=250, y=20)
+    close_calendar = Button(login_success_screen, text="Close")
+    close_calendar.pack()
+
+
+#  Creating a password not recognised window
+def password_not_recognised():
+    #  Globalising it
+    global password_not_recog_screen
+
+    #  Defining the following parameters
+    password_not_recog_screen = Toplevel(login_screen)
+    password_not_recog_screen.title("Success")
+    password_not_recog_screen.geometry("150x100")
+
+    #  Creating a label and a button
+    Label(password_not_recog_screen, text="Invalid Password ").pack()
+    Button(password_not_recog_screen, text="OK", command=delete_password_not_recognised).pack()
+
+
+#  Creating a user not found function
+def user_not_found():
+    #  Globalising it
+    global user_not_found_screen
+
+    #  Defining the following parameters
+    user_not_found_screen = Toplevel(login_screen)
+    user_not_found_screen.title("Success")
+    user_not_found_screen.geometry("150x100")
+
+    #  Creating a label and a button
+    Label(user_not_found_screen, text="User Not Found").pack()
+    Button(user_not_found_screen, text="OK", command=delete_user_not_found_screen).pack()
+
+
+#  Creating a delete password not recognised and destroying the window specified
+def delete_password_not_recognised():
+    password_not_recog_screen.destroy()
+
+
+#  Creating a delete user not found screen and destroying the window specified
+def delete_user_not_found_screen():
+    user_not_found_screen.destroy()
+
+
+#  Creating a main page window
+def main_account_screen():
+    #  Globalising it
+    global main_screen
+
+    #  Defining the following parameters
+    main_screen = Tk()
+    main_screen.geometry("450x200")
+    main_screen.title("Login/ Register")
+
+    #  Creating labels and buttons
+    Label(text="Select Your Choice", width="300", height="1", font=("Calibri", 12)).pack()
+    Label(text="").pack()
+    Button(text="Login", bg="lightgreen", height="1", width="20", command=login).pack()
+    Label(text="").pack()
+    Button(text="Register", bg="lightyellow", height="1", width="20", command=register).pack()
+
+    picture = PhotoImage(file="main picture.png")
+    photo_label = Label(main_screen, image=picture, height="75", width="75")
+    photo_label.pack()
+    photo_label.place(x=30, y=45)
+
+    #  Calling a function
+    main_screen.mainloop()
+
+
+#  Keeping the window open
+main_account_screen()
+
+
+
